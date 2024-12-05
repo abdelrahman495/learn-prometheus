@@ -26,7 +26,7 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ["localhost:9090", "34.207.78.88:9100", "54.90.66.250:9100"]
+      - targets: ["localhost:9090"]
 
   - job_name: "ec2_sd"
     ec2_sd_configs:
@@ -35,6 +35,7 @@ scrape_configs:
           - name: "tag:Role"
             values: ["Web Server"]
     relabel_configs:
+      - source_labels: [__meta_ec2_tag_Name]
+        target_label: instance
       - source_labels: [__meta_ec2_tag_Role]
-        regex: "Web Server"
-        action: keep
+        target_label: role
